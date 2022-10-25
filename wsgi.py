@@ -1,17 +1,17 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 import sys
-application = Flask(__name__)
+wsgi = Flask(__name__)
 
 
-@application.route("/")
+@wsgi.route("/")
 def hello():
     return render_template("hello.html")
 
-@application.route("/apply")
+@wsgi.route("/apply")
 def apply():
     return render_template("apply.html")
 
-@application.route("/applyphoto")
+@wsgi.route("/applyphoto")
 def apply_photo():
     
     location = request.args.get("location")
@@ -20,18 +20,15 @@ def apply_photo():
     print(location, cleaness, built_in)
     return render_template("apply_photo.html")
 
-@application.route("/upload_done", methods=["POST"])
+@wsgi.route("/upload_done", methods=["POST"])
 def upload_done():
-    upladed_files = request.files["file"]
+    uploaded_files = request.files["file"]
     uploaded_files.save("static/img/{}.jpeg".format(1))
 
     return redirect(url_for("hello"))
 
-@application.route("/list")
+@wsgi.route("/list")
 def list():
     return render_template("list.html")
 
-
-if __name__ == "__main__":
-    application.run(host='0.0.0.0')
     
